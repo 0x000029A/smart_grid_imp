@@ -1,6 +1,6 @@
 void setup() {
   // put your setup code here, to run once:
-
+static_assert
 }
 
 void loop() {
