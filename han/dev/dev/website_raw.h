@@ -1,4 +1,4 @@
-const char HTML_RAW[] = R"======(
+const char HTML_RAW[] PROGMEM = R"rawliteral(
 HTTP/1.1 200 OK
 Content-type:text/html
 
@@ -7,7 +7,6 @@ Content-type:text/html
 <head>
   <meta charset="utf-8">
   <!--<meta http-equiv="refresh" content="30">-->
-  <link rel="stylesheet" href="styles.css">
   <title>Smart Grid Control Panel</title>
 </head>
 <style>
@@ -132,11 +131,20 @@ input:checked + .slider:before {
         <span class="slider round"></span>
       </label>
     </div>
+    <p id="RESPONSE"></p>
 
   </div>
   <script type="module">
-    var led_state_var = document.getElementById('led_switch').checked;
+    //var led_state_var = document.getElementById('led_switch').checked;
+    var xhttp = new XMLHttpRequest();
+    if (document.getElementById('led_switch').checked == true) {
+      xhttp.open("GET", "/H", true);
+    } else {
+      xhttp.open("GET", "/L", true);
+    }
+    xhttp.send();
+    
   </script>
 </body>
 </html>
-)======";
+)rawliteral";
