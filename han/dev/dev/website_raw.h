@@ -1,7 +1,4 @@
 const char HTML_RAW[] PROGMEM = R"rawliteral(
-HTTP/1.1 200 OK
-Content-type:text/html
-
 <!doctype html>
 <html>
 <head>
@@ -120,6 +117,7 @@ input:checked + .slider:before {
 }
 </style>
 <body>
+
   <p id="main_title">Smart Grid Control Panel</p>
   <div id="panel">
 
@@ -135,14 +133,17 @@ input:checked + .slider:before {
 
   </div>
   <script type="module">
-    //var led_state_var = document.getElementById('led_switch').checked;
-    var xhttp = new XMLHttpRequest();
-    if (document.getElementById('led_switch').checked == true) {
-      xhttp.open("GET", "/H", true);
-    } else {
-      xhttp.open("GET", "/L", true);
-    }
-    xhttp.send();
+    const xhttp = new XMLHttpRequest();
+    const ledSW = document.getElementById('led_switch');
+
+    ledSW.addEventListener('click', function runThisOnButtonClick(event) {
+      if (document.getElementById('led_switch').checked == false) {
+        xhttp.open("GET", '/L', true);
+      } else {
+        xhttp.open("GET", '/H', true);
+      }
+      xhttp.send();
+    });
     
   </script>
 </body>

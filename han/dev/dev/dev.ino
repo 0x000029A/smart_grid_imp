@@ -22,7 +22,7 @@
 
 // Set these to your desired credentials.
 const char *ssid = "ESP32";
-const char *password = "ESP_SG_32";
+const char *password = "espesp32";
 
 WiFiServer server(80);
 
@@ -65,7 +65,15 @@ void loop() {
           if (currentLine.length() == 0) {
             // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
             // and a content-type so the client knows what's coming, then a blank line:
+            client.println("HTTP/1.1 200 OK");
+            client.println("Content-type:text/html");
+            client.println();
+
+            // the content of the HTTP response follows the header:
             client.write(HTML_RAW);
+
+            // The HTTP response ends with another blank line:
+            client.println();
             // break out of the while loop:
             break;
           } else {    // if you got a newline, then clear currentLine:
