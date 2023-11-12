@@ -15,6 +15,7 @@
 #include <WiFiClient.h>
 #include <WiFiAP.h>
 #include "website_raw.h"
+#include "ACS712.h"
 
 #ifndef LED_BUILTIN
 #define LED_BUILTIN 2   // Set the GPIO pin where you connected your test LED or comment this line out if your dev board has a built-in LED
@@ -26,6 +27,7 @@ const char *password = "espesp32";
 
 WiFiServer server(80);
 
+uint32_t start, stop;
 
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
@@ -46,6 +48,12 @@ void setup() {
   server.begin();
 
   Serial.println("Server started");
+  ACS.setADC(signal, 5, 1024);
+  ACS.autoMidPoint();
+  Serial.print("MidPoint: ");
+  Serial.print(ACS.getMidPoint());
+  Serial.print(". Noise mV: ");
+  Serial.println(ACS.getNoisemV());
 }
 
 void loop() {
@@ -96,4 +104,22 @@ void loop() {
     client.stop();
     Serial.println("Client Disconnected.");
   }
+  delay(100);
+  start = micros();
+  //  int mA = ACS.mA_AC();
+  int mA = ACS.mA_AC_sampling();
+  stop = micros();
+  Serial.print("mA: ");
+  Serial.print(mA);
+  Serial.print(". Form factor: ");
+  Serial.print(ACS.getFormFactor());
+  Serial.print("  time: ");
+  Serial.println(stop - start);
+  delay(5000);
+}
+
+//  simulated 50 Hz signal
+uint16_t signal(uint8_t p)
+{
+  return 512 + 400 * sin((micros() % 1000000) * (TWO_PI * 50 / 1e6));
 }
