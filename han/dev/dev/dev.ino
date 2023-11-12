@@ -27,6 +27,8 @@ const char *password = "espesp32";
 
 WiFiServer server(80);
 
+ACS712 ACS(25, 3.3, 4095, 185);
+
 uint32_t start, stop;
 
 void setup() {
@@ -48,7 +50,7 @@ void setup() {
   server.begin();
 
   Serial.println("Server started");
-  ACS.setADC(signal, 5, 1024);
+  ACS.setADC(signal, 5, 4095);
   ACS.autoMidPoint();
   Serial.print("MidPoint: ");
   Serial.print(ACS.getMidPoint());
