@@ -61,7 +61,7 @@ void setup() {
 
   Serial.println("Server started");
 
-  ACS.setADC(I_PIN, 5, 4095);
+  ACS.setADC(null, 5, 4095);
   ACS.autoMidPoint();
   Serial.print("MidPoint: ");
   Serial.print(ACS.getMidPoint());
@@ -136,10 +136,4 @@ Serial.print("Voltage:");
   Serial.print(voltage);
 Serial.println();
   delay(5000);
-}
-
-//  simulated 50 Hz signal
-uint16_t signal(uint8_t p)
-{
-  return analogRead(I_PIN);
 }
