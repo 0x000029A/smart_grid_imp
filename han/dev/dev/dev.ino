@@ -21,13 +21,15 @@
 #define LED_BUILTIN 2   // Set the GPIO pin where you connected your test LED or comment this line out if your dev board has a built-in LED
 #endif
 
+#define ANALOG_PIN 2
+
 // Set these to your desired credentials.
 const char *ssid = "ESP32";
 const char *password = "espesp32";
 
 WiFiServer server(80);
 
-ACS712 ACS(25, 3.3, 4095, 185);
+ACS712 ACS(ANALOG_PIN, 3.3, 4095, 185);
 
 uint32_t start, stop;
 
