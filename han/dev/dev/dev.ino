@@ -126,5 +126,5 @@ void loop() {
 //  simulated 50 Hz signal
 uint16_t signal(uint8_t p)
 {
-  return 512 + 400 * sin((micros() % 1000000) * (TWO_PI * 50 / 1e6));
+  return analogRead(I_PIN);
 }
