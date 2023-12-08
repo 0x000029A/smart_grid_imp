@@ -16,12 +16,20 @@
 #include <WiFiAP.h>
 #include "website_raw.h"
 #include "ACS712.h"
+#include "ZMPT101B.h"
 
 #ifndef LED_BUILTIN
 #define LED_BUILTIN 2   // Set the GPIO pin where you connected your test LED or comment this line out if your dev board has a built-in LED
 #endif
 
-#define ANALOG_PIN 2
+#define I_PIN 2
+#define V_PIN 3
+
+#define SENSITIVITY 500.0f
+
+// ZMPT101B sensor output connected to analog pin 3
+// and the voltage source frequency is 50 Hz.
+ZMPT101B voltageSensor(V_PIN, 50.0);
 
 // Set these to your desired credentials.
 const char *ssid = "ESP32";
@@ -29,7 +37,7 @@ const char *password = "espesp32";
 
 WiFiServer server(80);
 
-ACS712 ACS(ANALOG_PIN, 3.3, 4095, 185);
+ACS712 ACS(I_PIN, 3.3, 4095, 185);
 
 uint32_t start, stop;
 
@@ -52,12 +60,14 @@ void setup() {
   server.begin();
 
   Serial.println("Server started");
-  ACS.setADC(signal, 5, 4095);
+
+  ACS.setADC(null, 5, 4095);
   ACS.autoMidPoint();
   Serial.print("MidPoint: ");
   Serial.print(ACS.getMidPoint());
   Serial.print(". Noise mV: ");
   Serial.println(ACS.getNoisemV());
+  voltageSensor.setSensitivity(SENSITIVITY)
 }
 
 void loop() {
@@ -119,11 +129,11 @@ void loop() {
   Serial.print(ACS.getFormFactor());
   Serial.print("  time: ");
   Serial.println(stop - start);
-  delay(5000);
-}
 
-//  simulated 50 Hz signal
-uint16_t signal(uint8_t p)
-{
-  return 512 + 400 * sin((micros() % 1000000) * (TWO_PI * 50 / 1e6));
+  float voltage =   voltageSensor.getRmsVoltage();
+Serial.println();
+Serial.print("Voltage:");
+  Serial.print(voltage);
+Serial.println();
+  delay(5000);
 }
